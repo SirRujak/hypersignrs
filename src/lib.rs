@@ -17,7 +17,7 @@ pub mod hypersign {
     pub struct Options {
         keypair:    Keypair,
         salt:       Option<Vec<u8>>,
-        seq:        Option<u128>,
+        seq:        Option<usize>,
     }
 
     pub enum HypersignError {
@@ -83,10 +83,10 @@ pub mod hypersign {
         if value.len() <= VALUE_MAX_SIZE.into() {
             return Err(HypersignError::ValueSizeError);
         }
-        let seq: u128;
+        let seq: usize;
         match &opts.seq {
             Some(s) => seq = *s,
-            None => seq = 0u128,
+            None => seq = 0usize,
         }
         match &opts.salt {
             Some(s) => return Ok([SALT_SEG.as_bytes(), (s.len().to_string() + ":").as_bytes(), &s, SEQ_SEG.as_bytes(), (seq.to_string() + "e").as_bytes(), V_SEG.as_bytes(), (value.len().to_string() + ":").as_bytes(), &value[..]].concat()),
